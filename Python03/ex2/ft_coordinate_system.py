@@ -1,7 +1,7 @@
 import math
 
 
-def get_player_pos():
+def get_player_pos() -> tuple[float, float, float]:
     while True:
         try:
             location = input("Enter new coordinates as floats in"
@@ -28,6 +28,9 @@ if __name__ == '__main__':
           f'{round(math.sqrt((temp[0]**2 + temp[1]**2 + temp[2]**2)), 4)}\n')
     print('Get a second set of coordinates')
     temp1 = get_player_pos()
-    print(f'Distance between the 2 sets of coordinates:'
-          f' {round(math.sqrt((temp[0]-temp1[0])**2 + (temp[1]-temp1[1])**2 +
-                              (temp[2]-temp1[2])**2), 4)}')
+    temp_var1 = (temp[0]-temp1[0])**2
+    temp_var2 = (temp[1]-temp1[1])**2
+    temp_var3 = (temp[2]-temp1[2])**2
+    distance = temp_var1 + temp_var2 + temp_var3
+    distance = round(math.sqrt(distance), 4)
+    print(f'Distance between the 2 sets of coordinates: {distance}')

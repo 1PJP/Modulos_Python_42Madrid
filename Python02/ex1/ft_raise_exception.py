@@ -1,4 +1,4 @@
-def input_temperature(temp_str):
+def input_temperature(temp_str: str) -> int:
     temp = int(temp_str)
     if temp > 50:
         raise ValueError(f'{temp}°C is too hot for plants (max 40°C)')
@@ -7,7 +7,7 @@ def input_temperature(temp_str):
     return temp
 
 
-def test_temperature():
+def test_temperature() -> None:
     print('=== Garden temperature checker ===')
     print()
     print("Input data is '25'")

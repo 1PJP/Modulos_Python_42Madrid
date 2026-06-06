@@ -1,11 +1,11 @@
 class Plant:
     class Stats:
-        def __init__(self):
+        def __init__(self) -> None:
             self._grow_count = 0
             self._age_count = 0
             self._show_count = 0
 
-        def display(self):
+        def display(self) -> None:
             print(f' Stats: {self._grow_count} grow,'
                   f' {self._age_count} age, {self._show_count} show')
 
@@ -47,7 +47,7 @@ class Plant:
         self._height = self._height + grow_day
         self._stats ._grow_count += 1
 
-    def age(self, age_days) -> None:
+    def age(self, age_days: int) -> None:
         self._age_ = self._age_ + age_days
         self._stats._age_count += 1
 
@@ -66,13 +66,13 @@ class Flower(Plant):
         self._color = color
         self._bloomed = False
 
-    def show(self):
+    def show(self) -> None:
         super().show()
         print(f' Color: {self._color}')
         if self._bloomed:
             print(f'{self._name} is blooming beautifully!')
 
-    def bloom(self):
+    def bloom(self) -> None:
         self._bloomed = True
 
 
@@ -82,11 +82,11 @@ class Tree(Plant):
         self._trunk = trunk
         self._shade_count = 0
 
-    def show(self):
+    def show(self) -> None:
         super().show()
         print(f' Trunk diameter {self._trunk}')
 
-    def produce_shade(self):
+    def produce_shade(self) -> None:
         print(f'Tree {self._name} now produce a shade of'
               f'{self._height} long and {self._trunk}cm wide.')
         self._shade_count += 1
@@ -98,11 +98,11 @@ class Seed(Flower):
         super().__init__(name, height, age, color)
         self._seeds = seeds
 
-    def show(self):
+    def show(self) -> None:
         super().show()
 
 
-def display_status(plant):
+def display_status(plant: Plant) -> None:
     print(f' [Statistics for {plant._name}]')
     plant._stats.display()
     if isinstance(plant, Tree):

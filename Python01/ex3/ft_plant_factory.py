@@ -16,7 +16,7 @@ class Plant:
         self.age_days = self.age_days + 1
 
 
-def ft_plant_factory():
+def ft_plant_factory() -> None:
 
     print('=== Plant Factory Output ===')
     plant1 = Plant('Rose', 25.0, 30)

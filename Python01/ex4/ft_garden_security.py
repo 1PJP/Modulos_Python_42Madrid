@@ -32,7 +32,7 @@ class Plant:
             print(f'Age update: {value_days} days old')
 
 
-def ft_garden_security():
+def ft_garden_security() -> None:
 
     print('=== Garden Security System ===')
     print('Plant created:', end=' ')

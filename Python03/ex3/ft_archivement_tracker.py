@@ -6,7 +6,7 @@ archivements = ['Crafting Genius', 'World Savior', 'Collector Supreme',
                 'Sharp Mind', 'Speed Runner', 'Unstoppable']
 
 
-def gen_player_archivements():
+def gen_player_archivements() -> set[str]:
     chance = random.randint(3, len(archivements))
     return (set(random.sample(archivements, chance)))
 
@@ -14,7 +14,7 @@ def gen_player_archivements():
 if __name__ == '__main__':
     print('=== Achivemets Tracker System ===\n')
     alice = gen_player_archivements()
-    print(f'Player Alice: {alice}')
+    print(f'Player Alice: {type(alice)}')
     bob = gen_player_archivements()
     print(f'Player Bob: {bob}')
     chalie = gen_player_archivements()

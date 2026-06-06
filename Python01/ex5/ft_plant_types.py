@@ -43,11 +43,11 @@ class Flower(Plant):
         super().__init__(name, height, age)
         self._color = color
 
-    def show(self):
+    def show(self) -> None:
         super().show()
         print(f' Color: {self._color}')
 
-    def bloom(self):
+    def bloom(self) -> None:
         print(f'{self._name} is bloomming beautifully!')
 
 
@@ -56,11 +56,11 @@ class Tree(Plant):
         super().__init__(name, height, age)
         self._trunk = trunk
 
-    def show(self):
+    def show(self) -> None:
         super().show()
         print(f' Trunk diameter: {self._trunk}')
 
-    def produce_shade(self):
+    def produce_shade(self) -> None:
         print(f'Tree {self._name} now produces a shade of '
               f'{self._height}cm long and {self._trunk}cm wide.')
 
@@ -72,16 +72,16 @@ class Vegetable(Plant):
         self._harvest_season = harvest_seaason
         self._nutritional = 0
 
-    def show(self):
+    def show(self) -> None:
         super().show()
         print(f' Harvest season: {self._harvest_season}')
         print(f' Nutricional value: {self._nutritional}')
 
-    def grow(self):
+    def grow(self) -> None:
         super().grow()
         self._nutritional = self._nutritional
 
-    def age(self):
+    def age(self) -> None:
         super().age()
         self._nutritional = self._nutritional + 1
 
