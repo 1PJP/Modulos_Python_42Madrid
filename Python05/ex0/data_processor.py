@@ -71,3 +71,16 @@ class LogProcessor(DataProcessor):
       #toca realizar la comprovacion para una lista de dict y para un dict solo
       #se verifica que todas las listan sean dict validos y que cada dict tenga 
       #valores validos, tanto clave y valor sean str
+
+   def ingest(self, data: list[dict[str, str]] | dict[str, str]) -> None:
+      if not self.validate(data):
+         raise ValueError('Invalid log entry')
+      if isinstance(data, list):
+         for i in data:
+            self._data.append(f"{i['log_level']}: {i['log_message']}")
+      else:
+         self._data.append(f"{data['log_level']}: {data['log_message']}")
+      #validamos que sean los parametros correctos y vemos, si es una lista
+      #hacemos un for para recorrer y agreagar al dict cada str
+      #si no es una lista y es un dict suelto, lo agregamos 
+
