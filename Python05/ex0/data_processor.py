@@ -22,8 +22,8 @@ class DataProcessor(ABC):
 #pasa el parametro por validate, lanza la excepcion y guarda el dato hecho str
 
     def output(self) -> Tuple[int, str]:
-        temp = self._data.pop(0) #guarda el numero de orden
-        data = self._count #saca el dato/numero mas antiguo
+        temp = self._data.pop(0) #extraigo ultimo valor 
+        data = self._count #guarda  valor extraido
         self._count += 1 #suma una al contador
         return (data, temp) #retorna un numero y el str
 
