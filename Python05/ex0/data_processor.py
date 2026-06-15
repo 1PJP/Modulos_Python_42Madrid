@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Tuple, Union
-#las clases astractas no llevan cuerpo, a diferencia de una normal
+#las clases astractas 'ABC' no llevan cuerpo, a diferencia de una normal
 #solo llevan un pass pero obliga a cada funcion llevarla y se le poner
 #el cuerpo dentro de cada funcion
 
