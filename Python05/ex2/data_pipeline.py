@@ -131,3 +131,35 @@ class JSONPlugin():
     y luego el print descriptivo del Json y el print de la union qye la 
     guardanos en una variable 
     """
+
+class DataStream:
+    def __init__(self) -> None:
+        self._processor: List[DataProcessor] = []
+
+    def register_processor(self, proc: DataProcessor) -> None:
+        self._processor.append(proc)
+
+    def process_stream(self, stream: list[typing.Any]) -> None:
+        for data in stream:
+            for i in self._processor:
+                if i.validate(data):
+                    i.ingest(data)
+                    break
+                else:
+                    print(f'DataStream error -'
+                          f' Can`t process element in stream: {data}')
+                    
+    def print_processor_status(self) -> None:
+        if not self._processor:
+            print('No processor found, no data\n')
+        else:
+            for i in self._processor:
+                print(f'{type(i).__name__}: total {i._count_total} items'
+                      f' processed, remaining {len(i._data)} on procesor')
+                
+    def output_pipeline(self, nb: int, pluging: ExportPlugin) -> None:
+
+                
+#if __name__ == '__main__':
+ #   print('=== Code Nexis - data Pipeline ===\n')
+  #  print('Initialize Data Stream...\n')
