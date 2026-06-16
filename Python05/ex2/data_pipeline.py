@@ -157,9 +157,22 @@ class DataStream:
                 print(f'{type(i).__name__}: total {i._count_total} items'
                       f' processed, remaining {len(i._data)} on procesor')
                 
-    def output_pipeline(self, nb: int, pluging: ExportPlugin) -> None:
+    def output_pipeline(self, nb: int, plugin: ExportPlugin) -> None:
+        for i in self._processor: 
+            result = []
+            for _ in range(nb):
+                result.append(i.output())
+            plugin.process_output(result)
+
+"""
+el primero for recorre cada proceso
+creun una variable con una lista vacia 
+el segundo foir es para repetir la antidad de veces, el caracter '_' significa
+reite este proceso nb veces, agregamos y guaradamos conn el append(i.output())
+y al final con el plugin exportamos los resultados 
+"""
 
                 
 #if __name__ == '__main__':
  #   print('=== Code Nexis - data Pipeline ===\n')
-  #  print('Initialize Data Stream...\n')
+ #  print('Initialize Data Stream...\n')
