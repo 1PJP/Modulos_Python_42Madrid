@@ -95,20 +95,39 @@ class ExportPlugin(Protocol):
     
 class CSVPlugin():
     def process_output(self, data: List[Tuple[int, str]]) -> None:
-        element = [tupla[1] for tupla in data]
-        total = ','.join(element)
+        element_C = [tupla[1] for tupla in data]
+        total = ','.join(element_C)
         print('CSV Ouput:')
         print(f'{total}')
     """ 
-    aqui use una ista de comprension en lugar de hacer 
-    elemets = []
+    aqui use una lista de comprension en lugar de hacer 
+    elemets_C = []
     for tupla in data;
     elements.append(tupla[1])
 
-    es lo mismo pero en una sola linea, dond le dogo que me de 
+    es lo mismo pero en una sola linea, donde le digo que me de 
     el valor 1 de data, implementado algo nuevo
     creamos una variable total y con join unimos los elementos 
     con una  ',' 
     y hacemos 2 prints uno de la info y otro del valor total 
 
+    """
+class JSONPlugin():
+    def process_output(self, data: List[Tuple[int, str]]) -> None:
+        element_J = [f'"item_{number}": "{valor}"' for number, valor in data]
+        total = "{" + ','.join(element_J) + "}"
+        print('JSON Output:')
+        print(f'{total}')
+
+    """
+    aqui usamos otra vez una lista de comprension en lugar de :
+    element_J = []
+    for number, valor in data:
+    elemnt_J.append(f'"item_{numer}": "{valor}"')
+
+    volvemos a unir todo con join, pero JSON necesita "{}" asi que 
+    las sumamos al principio y usamos la misma logica que el join de CSV, solo que
+    al principio y al final lleva {} y las agregamos con un '+' ya que es un str
+    y luego el print descriptivo del Json y el print de la union qye la 
+    guardanos en una variable 
     """
