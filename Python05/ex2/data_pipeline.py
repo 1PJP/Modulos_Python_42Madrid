@@ -145,9 +145,9 @@ class DataStream:
                 if i.validate(data):
                     i.ingest(data)
                     break
-                else:
-                    print(f'DataStream error -'
-                          f' Can`t process element in stream: {data}')
+            else:
+                print(f'DataStream error -'
+                        f' Can`t process element in stream: {data}')
                     
     def print_processor_status(self) -> None:
         if not self._processor:
@@ -161,7 +161,8 @@ class DataStream:
         for i in self._processor: 
             result = []
             for _ in range(nb):
-                result.append(i.output())
+                if len(i._data) > 0:
+                    result.append(i.output())
             plugin.process_output(result)
 
 """
@@ -173,6 +174,46 @@ y al final con el plugin exportamos los resultados
 """
 
                 
-#if __name__ == '__main__':
- #   print('=== Code Nexis - data Pipeline ===\n')
- #  print('Initialize Data Stream...\n')
+if __name__ == '__main__':
+   print('=== Code Nexis - data Pipeline ===\n')
+   print('Initialize Data Stream...\n')
+   print('=== DataStream statistics ===')
+
+   stream = DataStream()
+   stream.print_processor_status()
+   print('Registering processors\n')
+   print()
+
+   numeric = NumericProcessor()
+   stream.register_processor(numeric)
+   text = TextProcessor()
+   stream.register_processor(text)
+   log = LogProcessor()
+   stream.register_processor(log)
+   batch = ['Hello world', [3.14, -1, 2.71],
+             [{'log_level': 'WARNING', 'log_message': 'Telnet access! Use ssh instead'},
+               {'log_level': 'INFO', 'log_message': 'User wil isconnected'}],
+                 42, ['Hi','five']]
+   print(f'send first batch of data stream: {batch}\n')
+   stream.process_stream(batch)
+
+   print('=== DataStream statistics ===')
+   stream.print_processor_status()
+   print()
+   print('Send 3 processed data from each processor to SCV plugin:')
+   csv = CSVPlugin()
+   stream.output_pipeline(3, csv)
+   print('\n=== DataStream statistics ===')
+   stream.print_processor_status()
+   print()
+   batch2 = [21, ['I love AI', 'LLMs are wonderful', 'Stay healthy'], [{'log_level': 'ERROR', 'log_message': '500 server crash'}, {'log_level': 'NOTICE', 'log_message': 'Certificate expires in 10 days'}], [32, 42, 64, 84, 128, 168],'World hello']
+   print(f'Send another batch of data: {batch2}\n')
+   stream.process_stream(batch2)
+   print('=== DataStream statistics ===')
+   stream.print_processor_status()
+   print()
+   print('Seed 5 proceed data from each processor to JSON plugin:')
+   json = JSONPlugin()
+   stream.output_pipeline(5, json)
+   print('\n=== DataStream statistics ===')
+   stream.print_processor_status()
