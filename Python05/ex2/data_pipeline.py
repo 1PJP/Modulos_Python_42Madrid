@@ -3,6 +3,7 @@ import typing
 from typing import Protocol
 from typing import Any, List, Dict, Tuple
 
+
 class DataProcessor(ABC):
     def __init__(self) -> None:
         self._data: List[str] = []
@@ -22,7 +23,7 @@ class DataProcessor(ABC):
         data = self._count
         self._count += 1
         return (data, last)
-    
+
 
 class NumericProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
@@ -30,7 +31,7 @@ class NumericProcessor(DataProcessor):
             return all(isinstance(i, (int, float)) for i in data)
         else:
             return isinstance(data, (int, float))
-        
+
     def ingest(self, data: List[int | float] | int | float) -> None:
         if not self.validate(data):
             raise ValueError('Improper numeric data')
@@ -42,13 +43,14 @@ class NumericProcessor(DataProcessor):
             self._data.append(str(data))
             self._count_total += 1
 
+
 class TextProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
         if isinstance(data, list):
             return all(isinstance(i, str) for i in data)
         else:
             return isinstance(data, str)
-        
+
     def ingest(self, data: List[str] | str) -> None:
         if not self.validate(data):
             raise ValueError('Improper text data')
@@ -60,6 +62,7 @@ class TextProcessor(DataProcessor):
             self._data.append(data)
             self._count_total += 1
 
+
 class LogProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
         if isinstance(data, list):
@@ -67,8 +70,8 @@ class LogProcessor(DataProcessor):
                 isinstance(i, dict) and
                 all(isinstance(k, str)
                     and isinstance(v, str) for k, v in i.items())
-                    for i in data
-            )
+                for i in data
+                    )
         else:
             if isinstance(data, dict):
                 key = all(isinstance(k, str) for k in data.keys())
@@ -76,7 +79,7 @@ class LogProcessor(DataProcessor):
                 return key and value
             else:
                 return False
-    
+
     def ingest(self, data: List[Dict[str, str]] | Dict[str, str]) -> None:
         if not self.validate(data):
             raise ValueError('Improper log data')
@@ -88,11 +91,14 @@ class LogProcessor(DataProcessor):
             self._data.append(f"{data['log_level']}: {data['log_message']}")
             self._count_total += 1
 
+
 class ExportPlugin(Protocol):
     def process_output(self, data: List[Tuple[int, str]]) -> None:
         ...
     #los '...' es co o el pass de la clase ABC
-    
+
+
+
 class CSVPlugin():
     def process_output(self, data: List[Tuple[int, str]]) -> None:
         element_C = [tupla[1] for tupla in data]
@@ -112,6 +118,8 @@ class CSVPlugin():
     y hacemos 2 prints uno de la info y otro del valor total 
 
     """
+
+
 class JSONPlugin():
     def process_output(self, data: List[Tuple[int, str]]) -> None:
         element_J = [f'"item_{number}": "{valor}"' for number, valor in data]
@@ -147,8 +155,8 @@ class DataStream:
                     break
             else:
                 print(f'DataStream error -'
-                        f' Can`t process element in stream: {data}')
-                    
+                      f' Can`t process element in stream: {data}')
+
     def print_processor_status(self) -> None:
         if not self._processor:
             print('No processor found, no data\n')
@@ -156,9 +164,9 @@ class DataStream:
             for i in self._processor:
                 print(f'{type(i).__name__}: total {i._count_total} items'
                       f' processed, remaining {len(i._data)} on procesor')
-                
+
     def output_pipeline(self, nb: int, plugin: ExportPlugin) -> None:
-        for i in self._processor: 
+        for i in self._processor:
             result = []
             for _ in range(nb):
                 if len(i._data) > 0:
@@ -173,47 +181,51 @@ reite este proceso nb veces, agregamos y guaradamos conn el append(i.output())
 y al final con el plugin exportamos los resultados 
 """
 
-                
 if __name__ == '__main__':
-   print('=== Code Nexis - data Pipeline ===\n')
-   print('Initialize Data Stream...\n')
-   print('=== DataStream statistics ===')
+    print('=== Code Nexis - data Pipeline ===\n')
+    print('Initialize Data Stream...\n')
+    print('=== DataStream statistics ===')
 
-   stream = DataStream()
-   stream.print_processor_status()
-   print('Registering processors\n')
-   print()
+    stream = DataStream()
+    stream.print_processor_status()
+    print('Registering processors\n')
+    print()
 
-   numeric = NumericProcessor()
-   stream.register_processor(numeric)
-   text = TextProcessor()
-   stream.register_processor(text)
-   log = LogProcessor()
-   stream.register_processor(log)
-   batch = ['Hello world', [3.14, -1, 2.71],
-             [{'log_level': 'WARNING', 'log_message': 'Telnet access! Use ssh instead'},
-               {'log_level': 'INFO', 'log_message': 'User wil isconnected'}],
-                 42, ['Hi','five']]
-   print(f'send first batch of data stream: {batch}\n')
-   stream.process_stream(batch)
+    numeric = NumericProcessor()
+    stream.register_processor(numeric)
+    text = TextProcessor()
+    stream.register_processor(text)
+    log = LogProcessor()
+    stream.register_processor(log)
+    batch = ['Hello world', [3.14, -1, 2.71],
+             [{'log_level': 'WARNING', 'log_message':
+                 'Telnet access!' ' Use ssh instead'},
+             {'log_level': 'INFO', 'log_message':
+                 'User wil isconnected'}], 42, ['Hi', 'five']]
+    print(f'send first batch of data stream: {batch}\n')
+    stream.process_stream(batch)
 
-   print('=== DataStream statistics ===')
-   stream.print_processor_status()
-   print()
-   print('Send 3 processed data from each processor to SCV plugin:')
-   csv = CSVPlugin()
-   stream.output_pipeline(3, csv)
-   print('\n=== DataStream statistics ===')
-   stream.print_processor_status()
-   print()
-   batch2 = [21, ['I love AI', 'LLMs are wonderful', 'Stay healthy'], [{'log_level': 'ERROR', 'log_message': '500 server crash'}, {'log_level': 'NOTICE', 'log_message': 'Certificate expires in 10 days'}], [32, 42, 64, 84, 128, 168],'World hello']
-   print(f'Send another batch of data: {batch2}\n')
-   stream.process_stream(batch2)
-   print('=== DataStream statistics ===')
-   stream.print_processor_status()
-   print()
-   print('Seed 5 proceed data from each processor to JSON plugin:')
-   json = JSONPlugin()
-   stream.output_pipeline(5, json)
-   print('\n=== DataStream statistics ===')
-   stream.print_processor_status()
+    print('=== DataStream statistics ===')
+    stream.print_processor_status()
+    print()
+    print('Send 3 processed data from each processor to SCV plugin:')
+    csv = CSVPlugin()
+    stream.output_pipeline(3, csv)
+    print('\n=== DataStream statistics ===')
+    stream.print_processor_status()
+    print()
+    batch2 = [21, ['I love AI', 'LLMs are wonderful', 'Stay healthy'],
+              [{'log_level': 'ERROR', 'log_message': '500 server crash'},
+               {'log_level': 'NOTICE', 'log_message':
+                'Certificate expires in 10 days'}], [32, 42, 64, 84, 128, 168],
+              'World hello']
+    print(f'Send another batch of data: {batch2}\n')
+    stream.process_stream(batch2)
+    print('=== DataStream statistics ===')
+    stream.print_processor_status()
+    print()
+    print('Seed 5 proceed data from each processor to JSON plugin:')
+    json = JSONPlugin()
+    stream.output_pipeline(5, json)
+    print('\n=== DataStream statistics ===')
+    stream.print_processor_status()
