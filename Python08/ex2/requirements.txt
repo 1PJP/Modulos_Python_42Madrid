@@ -1,0 +1,3 @@
+python-dotenv==1.2.4
+#crear el entorno es python -m venv matrix_env
+#activar el entorno es source matrix_env/bin/activate

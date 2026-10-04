@@ -8,6 +8,7 @@ if __name__ == '__main__':
         print(f'Total arguments: {len(sys.argv)}\n')
     else:
         print(f'Arguments received: {len(sys.argv) - 1}')
-        for i in range(1, len(sys.argv)):
+        for i in range(1, len(sys.argv)): 
+#        for i in sys.argv[1:]:
             print(f'Argument {i}: {sys.argv[i]}')
         print(f'Total arguments {len(sys.argv)}\n')
